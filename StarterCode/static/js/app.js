@@ -7,6 +7,7 @@ function init() {
     // Read in the JSON file 
     d3.json("samples.json").then(importedData => {
     var data = importedData;
+    //console.log(data);
     // Select the test subject ID, samples and metadata from sample json
     justtestsubjects = data.names;
     justsamples = data.samples;
