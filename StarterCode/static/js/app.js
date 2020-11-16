@@ -1,26 +1,19 @@
+//Function to intialize the dashboard upon loading
 function init() {
 
-    // Variable to select the location of the bar chart from index.html
+    // Select the bar chart from index.html
     var CHART = d3.selectAll("#bar").node();
 
-    // Use D3 fetch to read the JSON file into importedData as the argument.
-    d3.json("samples.json").then(importedData => {
-    var data = importedData;
+    // Read in the JSON file 
+    d3.json("samples.json").then(data => {
 
-    // Get just the "testsubject ids" from the data set
+    // Select the test subject ID, samples and metadata from sample json
     justtestsubjects = data.names;
-
-    // Get just the "samples" from the data set
     justsamples = data.samples;
-
-    // Get just the "metadata" from the data set
     justmetadata = data.metadata;
 
-    // Pre-Populate data into the Test Subject ID select dropdown list
-    // Select the d3 input element for the dropdown
+    // Select the dropdown and build the Subject ID dropdown
     const subjectselect = d3.select("#selDataset");
-
-    // Build the Test Subject ID drop down list
     justtestsubjects.forEach(namevalue =>{
         var option = subjectselect.append("option");
         option.text(namevalue);
@@ -33,20 +26,19 @@ function init() {
     let otuids = justsamples[0].otu_ids;
     let otulabels = justsamples[0].otu_labels;
     
-    // Slice the first 10 objects for plotting - bar chart requirement
-    sampvalues = sampvalues.slice(0, 10);
+    // Slice the first 10 objects for plotting
     otuids = otuids.slice(0, 10);
     otulabels = otulabels.slice(0,10);
 
-    // Format OTU ID string
+    // Format OTU ID string for y labels
     let otuidslist = otuids.map(otuid => 'OTU ' + otuid);
 
-    // Reverse the arrays to meet Plotly's default requirements
+    //reverse values so they show correctly in the dashboard
     sampvalues = sampvalues.reverse();
     otuidslist = otuidslist.reverse();
     otulabels = otulabels.reverse();
     
-    // Trace for the the bar chart
+    // Inputs for Plotly to make the bar chart
     var trace = {
     x: sampvalues,
     y: otuidslist,
@@ -54,21 +46,15 @@ function init() {
     type: "bar",
     orientation: "h"
     };
-
-    // data
     var chartData = [trace];
-
-    // // Apply the group bar mode to the layout
     var layout = {
     title: "Top 10 OTUs found in the individual subject"
     };
 
-    // Render the plot to the div tag with id "bar"
+    //PLot the bar chart info
     Plotly.newPlot(CHART, chartData, layout);
     
-    //***********************************
-    // Plot the Bubble chart  
-    //***********************************
+    // PLot the bubble plot data
     var trace1 = {
     x: justsamples[0].otu_ids,
     y: justsamples[0].sample_values,
@@ -89,9 +75,7 @@ function init() {
     };
     Plotly.newPlot('bubble', data, layout);
 
-    //*************************************
-    // Populate the Demographic Data panel
-    //*************************************
+    //Add the metadata into the panel
     d3.select("#sample-metadata").append("p").text('ID: '+ justmetadata[0].id);
     d3.select("#sample-metadata").append("p").text('Ethnicity: '+ justmetadata[0].ethnicity);
     d3.select("#sample-metadata").append("p").text('Gender: '+ justmetadata[0].gender);
@@ -100,33 +84,26 @@ function init() {
     d3.select("#sample-metadata").append("p").text('Bbtype: '+ justmetadata[0].bbtype);
     d3.select("#sample-metadata").append("p").text('Wfreq: '+ justmetadata[0].wfreq);
     
-     //***********************************************
-     // Plot the Belly button washing Gauge chart 
-     //***********************************************
+    //Plot the gauge chart
     initGaugeChart();
     });
 };  
-  // End of init() function
 
-  //***********************************************************
-  // Call updatePlotly() when a change takes place to the DOM
-  //***********************************************************
-
+// Runs the updatePlotly function when a change happens in the drop down menu    
 d3.selectAll("body").on("change", updatePlotly);
 
 var CHART = d3.selectAll("#bar").node();
 
 // This function is called when a dropdown menu item is selected
 function updatePlotly() {
-    // Use D3 to select the dropdown menu
+    // Select the dropdown menu
     var subjectselect = d3.select("#selDataset");
 
     // Assign the value of the dropdown menu option to a variable
     var dataset = subjectselect.node().value;
 
     // Find the index of the subject in the justtestsubjects array
-    // This is necessary to find all of the dependant data for the 
-    // selected subject
+    //index of finds the provided input in the array and output the matching index
     let subjectindex = justtestsubjects.indexOf(dataset);
     
     // Build arrays for the primary axes and labels for the bar plot.
@@ -134,34 +111,30 @@ function updatePlotly() {
     let otuids = justsamples[subjectindex].otu_ids;
     let otulabels = justsamples[subjectindex].otu_labels;
 
-    // Slice the first 10 objects for plotting - bar chart requirement
+    // Slice the first 10 objects for plotting
     sampvalues = sampvalues.slice(0, 10);
     otuids = otuids.slice(0, 10);
     otulabels = otulabels.slice(0,10);
 
-    // Format OTU ID string
+    // Format OTU ID string for y labels
     let otuidslist = otuids.map(otuid => 'OTU ' + otuid);
 
-    // Reverse the array due to Plotly's defaults
+    //reverse values so they show correctly in the dashboard
     sampvalues = sampvalues.reverse();
     otuidslist = otuidslist.reverse();
     otulabels = otulabels.reverse();
 
-    // Trace variables for the the bar chart
+    // Trace input for the bar chart
     x = sampvalues;
     y = otuidslist;
     text = otulabels;
 
-    //***********************************
-    // Re-style the Bar chart  
-    //***********************************
+    //Replot the bar chart
     Plotly.restyle(CHART, "x", [x]);
     Plotly.restyle(CHART, "y", [y]);
     Plotly.restyle(CHART, "text", [text]);
 
-    //***********************************
-    // Re-Plot the Bubble chart  
-    //***********************************
+    // Replot the bubble plot 
     var trace1 = {
         x: justsamples[subjectindex].otu_ids,
         y: justsamples[subjectindex].sample_values,
@@ -183,8 +156,7 @@ function updatePlotly() {
 
     Plotly.newPlot('bubble', data, layout);
 
-    // Demographic Data Refresh after first clearing the previously selected/updated demographic data
-
+    // Clear and updating the info in the metadata panel
     d3.select("#sample-metadata").selectAll('p').remove();
 
     d3.select("#sample-metadata").append("p").text('ID: '+ justmetadata[subjectindex].id);
@@ -195,12 +167,8 @@ function updatePlotly() {
     d3.select("#sample-metadata").append("p").text('Bbtype: '+ justmetadata[subjectindex].bbtype);
     d3.select("#sample-metadata").append("p").text('Wfreq: '+ justmetadata[subjectindex].wfreq);
 
-     //*******************************************************************
-     // Call function to restyle Belly button washing Gauge chart restyle
-     //*******************************************************************
-
+    //Call function to restyle the gauge chart based on the ID selected. (Called form bonus.js)
     restyleGaugeChart(subjectindex);
 }
-  // End of updatePlotly()
 
 init();
