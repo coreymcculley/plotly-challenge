@@ -1,4 +1,4 @@
-
+//Create the Gauge Chart and function to remake the chart if the ID is changed.
 function  initGaugeChart() { 
     var data = [
         {
@@ -27,14 +27,8 @@ function  initGaugeChart() {
       var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
       Plotly.newPlot('gauge', data, layout);
     };
-//End Belly button init gauge chart//
 
-//************************************************************************
-// The restyleGaugeChart(subjindex) function is called from app.js 
-// from the updatePlotly() function updates all plots on the index.html page
-// when the user selects a different Test Subject ID.
-// It defines the data and layout for the Belly button washing Gauge chart 
-//*************************************************************************
+//Function to remake the Gauge chart. Also called in the app.js file
   function restyleGaugeChart(subjindex) {
 
     value = justmetadata[subjindex].wfreq;
