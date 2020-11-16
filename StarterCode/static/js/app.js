@@ -5,8 +5,8 @@ function init() {
     var CHART = d3.selectAll("#bar").node();
 
     // Read in the JSON file 
-    d3.json("samples.json").then(data => {
-
+    d3.json("samples.json").then(importedData => {
+    var data = importedData;
     // Select the test subject ID, samples and metadata from sample json
     justtestsubjects = data.names;
     justsamples = data.samples;
@@ -14,6 +14,7 @@ function init() {
 
     // Select the dropdown and build the Subject ID dropdown
     const subjectselect = d3.select("#selDataset");
+
     justtestsubjects.forEach(namevalue =>{
         var option = subjectselect.append("option");
         option.text(namevalue);
@@ -27,6 +28,7 @@ function init() {
     let otulabels = justsamples[0].otu_labels;
     
     // Slice the first 10 objects for plotting
+    sampvalues = sampvalues.slice(0, 10);
     otuids = otuids.slice(0, 10);
     otulabels = otulabels.slice(0,10);
 
@@ -48,7 +50,8 @@ function init() {
     };
     var chartData = [trace];
     var layout = {
-    title: "Top 10 OTUs found in the individual subject"
+    title: "Top 10 OTUs found in the individual subject",
+    font: { color: "black", family: "Arial" }
     };
 
     //PLot the bar chart info
@@ -71,7 +74,8 @@ function init() {
     
     var layout = {
         title: 'All samples taken for the individual subject',
-        showlegend: false
+        showlegend: false,
+        font: { color: "black", family: "Arial" }
     };
     Plotly.newPlot('bubble', data, layout);
 
@@ -151,7 +155,8 @@ function updatePlotly() {
     
     var layout = {
         title: 'All samples taken for the individual subject',
-        showlegend: false
+        showlegend: false,
+        font: { color: "black", family: "Arial" }
     };
 
     Plotly.newPlot('bubble', data, layout);

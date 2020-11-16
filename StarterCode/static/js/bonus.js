@@ -8,6 +8,7 @@ function  initGaugeChart() {
           type: "indicator",
           mode: "gauge+number",
           gauge: {
+            bar: { color: "darkblue" },
             axis: { range: [0, 9] },
             steps: [
               { range: [0, 1], color: "rgb(255,102,102)" },
@@ -18,13 +19,17 @@ function  initGaugeChart() {
               { range: [5, 6], color: "rgb(178,255,102)" },
               { range: [6, 7], color: "rgb(153,255,51)" },
               { range: [7, 8], color: "rgb(51,255,51)" },
-              { range: [8, 9], color: "rgb(0,255,0)" }
+              { range: [8, 9], color: "rgb(50,200,50)" }
             ],
           }
         }
       ];
       
-      var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+      var layout = { width: 475, 
+                    height: 410, 
+                    margin: { t: 0, b: 0 },
+                    paper_bgcolor: "white",
+                    font: { color: "black", family: "Arial" } };
       Plotly.newPlot('gauge', data, layout);
     };
 
