@@ -50,7 +50,7 @@ function init() {
     };
     var chartData = [trace];
     var layout = {
-    title: "Top 10 OTUs found in the individual subject",
+    title: "Top 10 OTUs Found",
     font: { color: "black", family: "Arial" }
     };
 
@@ -73,7 +73,7 @@ function init() {
     var data = [trace1];
     
     var layout = {
-        title: 'All samples taken for the individual subject',
+        title: 'All Samples Taken',
         showlegend: false,
         font: { color: "black", family: "Arial" }
     };
