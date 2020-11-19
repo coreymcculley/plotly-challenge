@@ -75,7 +75,9 @@ function init() {
     var layout = {
         title: 'All Samples Taken',
         showlegend: false,
-        font: { color: "black", family: "Arial" }
+        font: { color: "black", family: "Arial" },
+        yaxis: {range: [0, 1000]},
+        xaxis: {range: [0, 5000]}
     };
     Plotly.newPlot('bubble', data, layout);
 
@@ -156,7 +158,9 @@ function updatePlotly() {
     var layout = {
         title: 'All samples taken for the individual subject',
         showlegend: false,
-        font: { color: "black", family: "Arial" }
+        font: { color: "black", family: "Arial" },
+        yaxis: {range: [0, 1000]},
+        xaxis: {range: [0, 5000]}
     };
 
     Plotly.newPlot('bubble', data, layout);
