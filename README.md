@@ -1,5 +1,5 @@
-**** Plotly Challenge
-***Belly Button Biodiversity
+#### Plotly Challenge
+### Belly Button Biodiversity
 
 A dataset containing biodiversity data taken from a number of test subjects. The resulting analysis on the bacteria found in the test swabs is presented in the dashboard located at https://coreymcculley.github.io/plotly-challenge/. 
 
